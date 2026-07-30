@@ -57,5 +57,3 @@ export const AdminDashboard = ({ setVistaActual, user }) => {
         </div>
     );
 };
-
-// nuevo
