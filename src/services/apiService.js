@@ -88,6 +88,24 @@ export const apiService = {
         localStorage.removeItem('rol');
     },
 
+    actualizarPerfilUsuario: async (username, nombre) => {
+        const response = await fetch(API_URL + 'auth/actualizar-perfil', {
+            method: 'PUT',
+            headers: authHeaders(true),
+            body: JSON.stringify({ username, nombre })
+        });
+        return await handleResponse(response);
+    },
+
+    cambiarPassword: async (username, actual, nueva) => {
+        const response = await fetch(API_URL + 'auth/cambiar-password', {
+            method: 'POST',
+            headers: authHeaders(true),
+            body: JSON.stringify({ username, actual, nueva })
+        });
+        return await handleResponse(response);
+    },
+
     // ==========================================
     // PRODUCTOS
     // ==========================================
