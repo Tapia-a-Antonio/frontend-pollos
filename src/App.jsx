@@ -8,6 +8,7 @@ import { Login } from './components/Login';
 import { AdminDashboard } from './components/AdminDashboard';
 import { CheckoutForm } from './components/CheckoutForm';
 import { MisCompras } from './components/MisCompras';
+import { PerfilUsuario } from './components/PerfilUsuario';
 
 function App() {
     const [vistaActual, setVistaActual] = useState('catalogo');
@@ -90,6 +91,8 @@ function App() {
 
     const vistaContenido = () =>{
         switch(vistaActual){
+            case 'perfil':
+                return <PerfilUsuario user={user} />;
             case 'catalogo':
                 return <Catalogo setVistaActual={setVistaActual} usuario={user} agregarACarrito={addToCart} />;
             case 'admin-dashboard':

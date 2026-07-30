@@ -62,12 +62,14 @@ export const Navbar = ({ vistaActual, setVistaActual, user,
 
                         {/* Botón de carrito y loggeo */}
                         {user ? (<>
-                            <div className="flex items-center text-sm font-medium 
-                            bg-indigo-800 px-3 py-1.5 rounded-full 
-                            border border-indigo-600 gap-1.5 max-w-[150px] truncate">
+                            <button
+                                onClick={() => setVistaActual('perfil')}
+                                title="Ver mi perfil"
+                                className="flex items-center text-sm font-medium bg-indigo-800 px-3 py-1.5 rounded-full border border-indigo-600 gap-1.5 max-w-[150px] truncate hover:bg-indigo-700 transition-colors cursor-pointer"
+                            >
                                 <User className="w-4 h-4 text-indigo-300 flex-shrink-0" />
                                 <span className="truncate">{user.nombre}</span>
-                            </div>
+                            </button>
 
                             {isClient && (
                                 <button onClick={openCart}
