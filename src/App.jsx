@@ -111,7 +111,8 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#F9F8F3] text-gray-800 antialiased">
+        // Cambiamos bg-[#F9F8F3] por bg-slate-900 y text-gray-800 por text-slate-200 para que el texto base se lea en el fondo oscuro
+        <div className="min-h-screen flex flex-col bg-slate-900 text-slate-200 antialiased">
             <Navbar vistaActual={vistaActual} setVistaActual={setVistaActual} user={user} onLogout={handleLogout} cartCount={cartCount} openCart={procesarCompra} />
             <main className="flex-grow pb-12">
                 {vistaContenido()}

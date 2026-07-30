@@ -76,11 +76,9 @@ export const Catalogo = ({ setVistaActual, usuario, agregarACarrito }) => {
 
       {/* Banner Principal */}
       <div className="bg-gradient-to-r from-indigo-800 to-indigo-600 rounded-2xl p-8 mb-8 text-white shadow-lg relative overflow-hidden">
-        <div className="relative z-10 max-w-xl">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Catálogo de Productos</h1>
-          <p className="mt-2 text-indigo-100 text-sm sm:text-base">
-            Explora las mejores ofertas, productos de calidad y envíos garantizados directamente por nuestros proveedores.
-          </p>
+        <div className="bg-gradient-to-r from-blue-950 to-blue-900 rounded-2xl p-6 mb-8 text-center shadow-lg">
+          <h1 className="text-3xl font-extrabold text-white">Catálogo de Dispositivos</h1>
+          <p className="text-blue-200 mt-2">Encuentra la mejor tecnología al mejor precio</p>
         </div>
         <div className="absolute right-0 bottom-0 top-0 opacity-10 flex items-center justify-center p-8">
           <ShoppingCart className="w-64 h-64" />
@@ -125,8 +123,8 @@ export const Catalogo = ({ setVistaActual, usuario, agregarACarrito }) => {
               <button
                 onClick={() => setSelecionCategoria('Todos')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${selecionCategoria === 'Todos'
-                    ? 'bg-indigo-50 text-indigo-700 font-bold'
-                    : 'text-gray-600 hover:bg-gray-50'
+                  ? 'bg-indigo-50 text-indigo-700 font-bold'
+                  : 'text-gray-600 hover:bg-gray-50'
                   }`}
               >
                 Todas las categorías
@@ -136,8 +134,8 @@ export const Catalogo = ({ setVistaActual, usuario, agregarACarrito }) => {
                   key={cat.id}
                   onClick={() => setSelecionCategoria(cat.nombre)}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${selecionCategoria === cat.nombre
-                      ? 'bg-indigo-50 text-indigo-700 font-bold'
-                      : 'text-gray-600 hover:bg-gray-50'
+                    ? 'bg-indigo-50 text-indigo-700 font-bold'
+                    : 'text-gray-600 hover:bg-gray-50'
                     }`}
                 >
                   {cat.nombre}
@@ -213,8 +211,8 @@ export const Catalogo = ({ setVistaActual, usuario, agregarACarrito }) => {
 
                           {/* Etiqueta de stock más pequeña */}
                           <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full tracking-wide shadow-sm ${isOutOfStock
-                              ? 'bg-red-50 text-red-600 border border-red-100'
-                              : 'bg-green-50 text-green-700 border border-green-100'
+                            ? 'bg-red-50 text-red-600 border border-red-100'
+                            : 'bg-green-50 text-green-700 border border-green-100'
                             }`}>
                             {isOutOfStock ? 'Sin stock' : `Disponibles: ${producto.stock}`}
                           </span>
@@ -225,8 +223,8 @@ export const Catalogo = ({ setVistaActual, usuario, agregarACarrito }) => {
                           onClick={() => agregarCarrito(producto)}
                           disabled={isOutOfStock}
                           className={`w-full flex items-center justify-center gap-2 p-2.5 rounded-xl font-bold text-sm shadow-sm transition-all duration-200 cursor-pointer ${isOutOfStock
-                              ? 'bg-gray-100 text-gray-400 shadow-none cursor-not-allowed'
-                              : 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-md'
+                            ? 'bg-gray-100 text-gray-400 shadow-none cursor-not-allowed'
+                            : 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-md'
                             }`}
                         >
                           <ShoppingCart className="w-4 h-4" />
