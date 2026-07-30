@@ -57,9 +57,9 @@ export const Registro = ({ onRegisterSuccess, onGoToLogin, onGoToCatalogo }) => 
 
     return (
         <div className="max-w-md w-full mx-auto my-12 bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-            <div className="bg-gradient-to-r from-indigo-800 to-indigo-900 px-6 py-8 text-center text-white">
-                <h2 className="text-2xl font-bold">Crear cuenta</h2>
-                <p className="text-indigo-200 mt-1 text-sm">Únete a Mercadito Libre hoy mismo</p>
+            <div className="bg-gradient-to-r from-blue-950 to-blue-900 px-6 py-6 text-center text-white">
+                <h2 className="text-2xl font-bold">¡Bienvenido a CellMarket!</h2>
+                <p className="text-blue-200 mt-1 text-sm">Registrate para continuar</p>
             </div>
             <form onSubmit={handleSubmit} className="p-8 space-y-5">
                 {error && (
@@ -74,7 +74,7 @@ export const Registro = ({ onRegisterSuccess, onGoToLogin, onGoToCatalogo }) => 
                         <span>{exito}</span>
                     </div>
                 )}
-                
+
                 {/* Cambiado a tipo email para que coordine con Login.jsx */}
                 <div>
                     <label className={labelCls}>Correo Electrónico *</label>
@@ -88,10 +88,10 @@ export const Registro = ({ onRegisterSuccess, onGoToLogin, onGoToCatalogo }) => 
                 {/* Nuevo selector de rol */}
                 <div>
                     <label className={labelCls}>Tipo de Cuenta *</label>
-                    <select 
-                        name="rol" 
-                        value={form.rol} 
-                        onChange={handleChange} 
+                    <select
+                        name="rol"
+                        value={form.rol}
+                        onChange={handleChange}
                         className={inputBase}
                     >
                         <option value="ROLE_CLIENTE">Cliente</option>

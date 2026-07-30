@@ -6,13 +6,11 @@ export const PerfilUsuario = ({ user }) => {
     const [cliente, setCliente] = useState(null);
     const [cargando, setCargando] = useState(true);
     
-    // Estados para Perfil
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({ nombre: '', telefono: '', direccion: '' });
     const [guardandoPerfil, setGuardandoPerfil] = useState(false);
     const [msgPerfil, setMsgPerfil] = useState({ type: '', text: '' });
 
-    // Estados para Contraseña
     const [passData, setPassData] = useState({ actual: '', nueva: '', confirmar: '' });
     const [guardandoPass, setGuardandoPass] = useState(false);
     const [msgPass, setMsgPass] = useState({ type: '', text: '' });
@@ -27,14 +25,18 @@ export const PerfilUsuario = ({ user }) => {
                     if (miPerfil) {
                         setCliente(miPerfil);
                         setFormData({ 
-                            nombre: miPerfil.nombre || '', 
+                            nombre: miPerfil.nombre || user.nombre || '', 
                             telefono: miPerfil.telefono || '', 
                             direccion: miPerfil.direccion || '' 
                         });
                     }
                 } else {
-                    // Si es Admin, solo pre-cargamos su nombre
-                    setFormData({ nombre: user.nombre, telefono: '', direccion: '' });
+                    // FIX ADMINISTRADOR: Toma el nombre directamente de la sesión
+                    setFormData({ 
+                        nombre: user.nombre || '', 
+                        telefono: '', 
+                        direccion: '' 
+                    });
                 }
             } catch (err) {
                 setMsgPerfil({ type: 'error', text: 'Error al conectar con el servidor.' });
@@ -51,17 +53,15 @@ export const PerfilUsuario = ({ user }) => {
         setMsgPerfil({ type: '', text: '' });
         
         try {
-            // 1. Todos pueden actualizar su nombre en la tabla 'usuarios'
             await apiService.actualizarPerfilUsuario(user.username, formData.nombre);
             
-            // 2. Si es cliente, sincronizamos también la tabla 'clientes'
             if (user.rol === 'ROLE_CLIENTE' && cliente) {
                 const datosActualizados = { ...cliente, nombre: formData.nombre, telefono: formData.telefono, direccion: formData.direccion };
                 const respuesta = await apiService.actualizarCliente(cliente.id, datosActualizados);
                 setCliente(respuesta);
             }
 
-            localStorage.setItem('nombre', formData.nombre); // Actualizar cache local
+            localStorage.setItem('nombre', formData.nombre);
             setMsgPerfil({ type: 'success', text: 'Perfil actualizado correctamente.' });
             setEditMode(false);
         } catch (err) {
@@ -86,7 +86,7 @@ export const PerfilUsuario = ({ user }) => {
         try {
             await apiService.cambiarPassword(user.username, passData.actual, passData.nueva);
             setMsgPass({ type: 'success', text: 'Contraseña actualizada con éxito.' });
-            setPassData({ actual: '', nueva: '', confirmar: '' }); // Limpiar formulario
+            setPassData({ actual: '', nueva: '', confirmar: '' });
         } catch (err) {
             setMsgPass({ type: 'error', text: err.message || 'La contraseña actual es incorrecta.' });
         } finally {
@@ -97,7 +97,7 @@ export const PerfilUsuario = ({ user }) => {
     if (cargando) {
         return (
             <div className="flex flex-col items-center justify-center py-20">
-                <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
+                <Loader2 className="w-12 h-12 text-blue-900 animate-spin" />
                 <p className="text-gray-500 mt-4 font-medium">Cargando datos...</p>
             </div>
         );
@@ -106,16 +106,15 @@ export const PerfilUsuario = ({ user }) => {
     return (
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
             
-            {/* SECCIÓN 1: DATOS DEL PERFIL */}
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-                <div className="bg-gradient-to-r from-indigo-800 to-indigo-600 px-8 py-8 text-white flex justify-between items-center">
+                <div className="bg-gradient-to-r from-blue-950 to-blue-900 px-8 py-8 text-white flex justify-between items-center">
                     <div className="flex items-center gap-5">
-                        <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                        <div className="bg-white/10 p-4 rounded-full backdrop-blur-sm border border-white/20">
                             <User className="w-8 h-8 text-white" />
                         </div>
                         <div>
-                            <h2 className="text-2xl font-extrabold">Datos Personales</h2>
-                            <p className="text-indigo-100 mt-1 flex items-center gap-2 text-sm">
+                            <h2 className="text-2xl font-extrabold">{formData.nombre || 'Usuario'}</h2>
+                            <p className="text-blue-200 mt-1 flex items-center gap-2 text-sm">
                                 <Mail className="w-4 h-4" /> {user?.username} ({user?.rol === 'ROLE_ADMIN' ? 'Administrador' : 'Cliente'})
                             </p>
                         </div>
@@ -138,20 +137,19 @@ export const PerfilUsuario = ({ user }) => {
                     <form onSubmit={handleSavePerfil} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-gray-700 flex items-center gap-2"><User className="w-4 h-4 text-indigo-500" /> Nombre Completo</label>
-                                <input type="text" value={formData.nombre} onChange={(e) => setFormData({...formData, nombre: e.target.value})} disabled={!editMode} required className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none disabled:bg-gray-50 disabled:text-gray-500 transition-all" />
+                                <label className="text-sm font-bold text-gray-700 flex items-center gap-2"><User className="w-4 h-4 text-blue-600" /> Nombre Completo</label>
+                                <input type="text" value={formData.nombre} onChange={(e) => setFormData({...formData, nombre: e.target.value})} disabled={!editMode} required className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-900 outline-none disabled:bg-gray-50 disabled:text-gray-500 transition-all" />
                             </div>
 
-                            {/* Solo mostramos Teléfono y Dirección a los Clientes */}
                             {user?.rol === 'ROLE_CLIENTE' && (
                                 <>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-bold text-gray-700 flex items-center gap-2"><Phone className="w-4 h-4 text-indigo-500" /> Teléfono</label>
-                                        <input type="tel" value={formData.telefono} onChange={(e) => setFormData({...formData, telefono: e.target.value})} disabled={!editMode} placeholder="Agrega un teléfono" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none disabled:bg-gray-50 disabled:text-gray-500 transition-all" />
+                                        <label className="text-sm font-bold text-gray-700 flex items-center gap-2"><Phone className="w-4 h-4 text-blue-600" /> Teléfono</label>
+                                        <input type="tel" value={formData.telefono} onChange={(e) => setFormData({...formData, telefono: e.target.value})} disabled={!editMode} placeholder="Agrega un teléfono" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-900 outline-none disabled:bg-gray-50 disabled:text-gray-500 transition-all" />
                                     </div>
                                     <div className="space-y-2 md:col-span-2">
-                                        <label className="text-sm font-bold text-gray-700 flex items-center gap-2"><MapPin className="w-4 h-4 text-indigo-500" /> Dirección de Envío</label>
-                                        <textarea value={formData.direccion} onChange={(e) => setFormData({...formData, direccion: e.target.value})} disabled={!editMode} rows="2" placeholder="Agrega tu dirección" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none disabled:bg-gray-50 disabled:text-gray-500 transition-all resize-none" />
+                                        <label className="text-sm font-bold text-gray-700 flex items-center gap-2"><MapPin className="w-4 h-4 text-blue-600" /> Dirección de Envío</label>
+                                        <textarea value={formData.direccion} onChange={(e) => setFormData({...formData, direccion: e.target.value})} disabled={!editMode} rows="2" placeholder="Agrega tu dirección" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-900 outline-none disabled:bg-gray-50 disabled:text-gray-500 transition-all resize-none" />
                                     </div>
                                 </>
                             )}
@@ -159,8 +157,8 @@ export const PerfilUsuario = ({ user }) => {
 
                         {editMode && (
                             <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                                <button type="button" onClick={() => setEditMode(false)} className="px-6 py-2.5 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-100 cursor-pointer">Cancelar</button>
-                                <button type="submit" disabled={guardandoPerfil} className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 flex items-center gap-2 cursor-pointer disabled:opacity-50">
+                                <button type="button" onClick={() => { setEditMode(false); setFormData({ nombre: user.nombre, telefono: cliente?.telefono || '', direccion: cliente?.direccion || '' })}} className="px-6 py-2.5 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-100 cursor-pointer">Cancelar</button>
+                                <button type="submit" disabled={guardandoPerfil} className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-blue-900 hover:bg-blue-950 flex items-center gap-2 cursor-pointer disabled:opacity-50">
                                     {guardandoPerfil ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Guardar
                                 </button>
                             </div>
@@ -169,10 +167,9 @@ export const PerfilUsuario = ({ user }) => {
                 </div>
             </div>
 
-            {/* SECCIÓN 2: CAMBIO DE CONTRASEÑA */}
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-                <div className="bg-gray-50 px-8 py-5 border-b border-gray-100 flex items-center gap-3">
-                    <Key className="w-6 h-6 text-indigo-600" />
+                <div className="bg-gray-50 px-8 py-5 border-b border-gray-200 flex items-center gap-3">
+                    <Key className="w-6 h-6 text-blue-900" />
                     <h3 className="text-xl font-bold text-gray-800">Seguridad y Contraseña</h3>
                 </div>
                 
@@ -187,15 +184,15 @@ export const PerfilUsuario = ({ user }) => {
                     <form onSubmit={handleSavePassword} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-gray-700">Contraseña Actual</label>
-                            <input type="password" value={passData.actual} onChange={(e) => setPassData({...passData, actual: e.target.value})} required placeholder="••••••••" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                            <input type="password" value={passData.actual} onChange={(e) => setPassData({...passData, actual: e.target.value})} required placeholder="••••••••" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-900 outline-none" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-gray-700">Nueva Contraseña</label>
-                            <input type="password" value={passData.nueva} onChange={(e) => setPassData({...passData, nueva: e.target.value})} required placeholder="Mínimo 6 caracteres" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                            <input type="password" value={passData.nueva} onChange={(e) => setPassData({...passData, nueva: e.target.value})} required placeholder="Mínimo 6 caracteres" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-900 outline-none" />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-gray-700">Confirmar Nueva</label>
-                            <input type="password" value={passData.confirmar} onChange={(e) => setPassData({...passData, confirmar: e.target.value})} required placeholder="Repite la contraseña" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none" />
+                            <input type="password" value={passData.confirmar} onChange={(e) => setPassData({...passData, confirmar: e.target.value})} required placeholder="Repite la contraseña" className="w-full p-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-900 outline-none" />
                         </div>
                         
                         <div className="md:col-span-3 flex justify-end pt-2">
@@ -206,7 +203,6 @@ export const PerfilUsuario = ({ user }) => {
                     </form>
                 </div>
             </div>
-
         </div>
     );
 };

@@ -1,49 +1,46 @@
 import React, { useState } from 'react';
 import { apiService } from '../services/apiService';
-import{ Mail, Lock, LogIn, AlertCircle} from 'lucide-react';
+import { Mail, Lock, LogIn, AlertCircle } from 'lucide-react';
 
 
-export const Login = ({onLoginSuccess, onGoToRegister}) => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+export const Login = ({ onLoginSuccess, onGoToRegister }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async(e) =>{
-        e.preventDefault();
-        setError('');
-        setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-        try{
-            const data = await apiService.login(username, password);
-            onLoginSuccess(data);
-        }catch(err){
-            setError(err.message || 
-                'Credenciales invalidas. Verifica tu correo o pass');
-        }finally{
-            setLoading(false);
-        }
-    };
+    try {
+      const data = await apiService.login(username, password);
+      onLoginSuccess(data);
+    } catch (err) {
+      setError(err.message ||
+        'Credenciales invalidas. Verifica tu correo o pass');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return(
-        <div className="max-w-lg w-full mx-auto my-12 bg-white 
+  return (
+    <div className="max-w-lg w-full mx-auto my-12 bg-white 
         rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-            <div className="bg-gradient-to-r from-indigo-800 to-indigo-900 
-                px-6 py-6 text-center text-white">
-                <h2 className="text-2xl font-bold">¡Bienvenido de nuevo!</h2>
-                <p className="text-indigo-200 mt-1 text-sm">Inicia sesion 
-                    en tu cuenta de MercaditoLibre</p>
-               
-            </div>
+      <div className="bg-gradient-to-r from-blue-950 to-blue-900 px-6 py-6 text-center text-white">
+        <h2 className="text-2xl font-bold">¡Bienvenido a CellMarket!</h2>
+        <p className="text-blue-200 mt-1 text-sm">Inicia sesión en tu cuenta para continuar</p>
+      </div>
 
-            <form onSubmit={handleSubmit} className="p-8 space-y-6">
-            {error && (
-            <div className="bg-red-50 text-red-700 p-4 rounded-xl flex 
+      <form onSubmit={handleSubmit} className="p-8 space-y-6">
+        {error && (
+          <div className="bg-red-50 text-red-700 p-4 rounded-xl flex 
                             items-start gap-2.5 border border-red-200 text-sm">
-                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                <span>{error}</span>
-            </div>
-            )}
+            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <span>{error}</span>
+          </div>
+        )}
 
         {/* Campo Correo */}
         <div>
@@ -100,6 +97,6 @@ export const Login = ({onLoginSuccess, onGoToRegister}) => {
         </div>
       </form>
 
-        </div>
-    );
+    </div>
+  );
 };

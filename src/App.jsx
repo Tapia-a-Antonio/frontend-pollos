@@ -111,7 +111,7 @@ function App() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-gray-50 text-gray-800 antialiased">
+        <div className="min-h-screen flex flex-col bg-[#F9F8F3] text-gray-800 antialiased">
             <Navbar vistaActual={vistaActual} setVistaActual={setVistaActual} user={user} onLogout={handleLogout} cartCount={cartCount} openCart={procesarCompra} />
             <main className="flex-grow pb-12">
                 {vistaContenido()}
